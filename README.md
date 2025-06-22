@@ -28,21 +28,24 @@ This project is a Spring Boot microservice designed to integrate with multiple p
     # cd multi-payment-gateway
     ```
 2.  **Configure Payment Gateways:**
-    Open `src/main/resources/application.properties`.
-    Update the placeholder API keys and secrets for the payment gateways you intend to use:
+    Open `multi-payment-gateway/src/main/resources/application.properties`.
+    The application is configured to read API keys from environment variables. You will need to set these variables in your environment before running the application.
 
+    For example, you might set them in your shell profile (e.g., `.bashrc`, `.zshrc`) or use a `.env` file with a tool like `dotenv` if you are running locally.
+
+    **Required Environment Variables:**
+
+    *   `PAYMENT_GATEWAY_API_KEY`: Your API key for the payment gateway.
+    *   `PAYMENT_GATEWAY_SECRET_KEY`: Your secret key for the payment gateway.
+
+    The `application.properties` file has placeholders like:
     ```properties
-    # Razorpay Configuration
-    razorpay.api.key=YOUR_RAZORPAY_KEY_ID
-    razorpay.api.secret=YOUR_RAZORPAY_KEY_SECRET
-    # razorpay.webhook.secret=YOUR_RAZORPAY_WEBHOOK_SECRET
-
-    # Stripe Configuration
-    stripe.api.key=YOUR_STRIPE_PUBLISHABLE_KEY
-    stripe.api.secret=YOUR_STRIPE_SECRET_KEY
-    # stripe.webhook.secret=YOUR_STRIPE_WEBHOOK_SECRET
+    payment.gateway.apiKey=${PAYMENT_GATEWAY_API_KEY:YOUR_API_KEY_HERE}
+    payment.gateway.secretKey=${PAYMENT_GATEWAY_SECRET_KEY:YOUR_SECRET_KEY_HERE}
     ```
-    You can also set a default payment gateway if desired (currently commented out in `application.properties`).
+    The part after the colon (e.g., `YOUR_API_KEY_HERE`) is a default value that will be used if the environment variable is not set. **It is strongly recommended to set these via environment variables and not rely on these default values, especially in production.**
+
+    The existing gateway-specific keys like `razorpay.api.key` or `stripe.api.key` in `application.properties` should be removed or updated to also use environment variables if you plan to use multiple distinct configurations. For this initial setup, we've added generic keys.
 
 ### Building the Application
 
